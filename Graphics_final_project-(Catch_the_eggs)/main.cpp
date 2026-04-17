@@ -29,11 +29,6 @@ const int   GAME_DURATION = 120;
 const float BASE_FALL_SPD = 2.8f;
 
 
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glutSwapBuffers();
-}
-
 void reshape(int w, int h) {
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
@@ -42,8 +37,54 @@ void reshape(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
+void setColor(float r, float g, float b, float a = 1.0f) {
+    glColor4f(r, g, b, a);
+}
 
+void drawRect(float x, float y, float w, float h) {
+    glBegin(GL_QUADS);
+    glVertex2f(x, y);
+    glVertex2f(x + w, y);
+    glVertex2f(x + w, y + h);
+    glVertex2f(x, y + h);
+    glEnd();
+}
 
+void drawCircle(float cx, float cy, float r, int segs = 32) {
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(cx, cy);
+    for (int i = 0; i <= segs; i++) {
+        float a = i * 2 * 3.14159f / segs;
+        glVertex2f(cx + cosf(a) * r, cy + sinf(a) * r);
+    }
+    glEnd();
+}
+
+void drawEllipse(float cx, float cy, float rx, float ry, int segs = 32) {
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(cx, cy);
+    for (int i = 0; i <= segs; i++) {
+        float a = i * 2 * 3.14159f / segs;
+        glVertex2f(cx + cosf(a) * rx, cy + sinf(a) * ry);
+    }
+    glEnd();
+}
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Test primitives
+    setColor(1, 0, 0);
+    drawRect(100, 100, 50, 50);
+
+    setColor(0, 1, 0);
+    drawCircle(400, 300, 40);
+
+    setColor(0, 0, 1);
+    drawEllipse(600, 400, 60, 40);
+
+    glutSwapBuffers();
+}
 
 int main(int argc, char** argv) {
     srand((unsigned)time(nullptr));
