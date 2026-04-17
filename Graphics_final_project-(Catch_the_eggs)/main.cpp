@@ -1,7 +1,6 @@
 #ifdef _WIN32
 #include <windows.h>
 #endif
-
 #include <GL/glut.h>
 #include <cmath>
 #include <cstdlib>
@@ -26,10 +25,23 @@ const float BASKET_H      = 30.f;
 const float EGG_R         = 12.f;
 const float PERK_W        = 22.f;
 const float PERK_H        = 22.f;
-const int   GAME_DURATION = 120;        // seconds
+const int   GAME_DURATION = 120;
 const float BASE_FALL_SPD = 2.8f;
 
 
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    glutSwapBuffers();
+}
+
+void reshape(int w, int h) {
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, WIN_W, 0, WIN_H);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
 
 
 
@@ -44,8 +56,10 @@ int main(int argc, char** argv) {
 
     glClearColor(0.4f, 0.7f, 1.0f, 1.0f);
 
-
-
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
     glutMainLoop();
+
+
     return 0;
 }
