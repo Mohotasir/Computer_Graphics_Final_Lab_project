@@ -14,7 +14,7 @@
 const int WIN_W = 800;
 const int WIN_H = 600;
 
-// ─── Constants ────────────────────────────────────────────────────────────────
+// ─── Constants─────────
 const int   NUM_STICKS    = 2;
 const float STICK_Y[2]    = {540.f, 500.f}; // y positions of sticks
 const float STICK_X1      = 50.f;
@@ -70,19 +70,29 @@ void drawEllipse(float cx, float cy, float rx, float ry, int segs = 32) {
     glEnd();
 }
 
+void drawBackground() {
+    // Sky gradient
+    glBegin(GL_QUADS);
+    setColor(0.4f, 0.7f, 1.0f);
+    glVertex2f(0, WIN_H);
+    glVertex2f(WIN_W, WIN_H);
+    setColor(0.7f, 0.9f, 1.0f);
+    glVertex2f(WIN_W, 120);
+    glVertex2f(0, 120);
+    glEnd();
+
+    // Ground
+    setColor(0.3f, 0.7f, 0.2f);
+    drawRect(0, 0, WIN_W, 120);
+
+    // Darker ground strip
+    setColor(0.25f, 0.55f, 0.15f);
+    drawRect(0, 0, WIN_W, 50);
+}
+
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
-
-    // Test primitives
-    setColor(1, 0, 0);
-    drawRect(100, 100, 50, 50);
-
-    setColor(0, 1, 0);
-    drawCircle(400, 300, 40);
-
-    setColor(0, 0, 1);
-    drawEllipse(600, 400, 60, 40);
-
+    drawBackground();
     glutSwapBuffers();
 }
 
