@@ -88,6 +88,22 @@ void drawBackground() {
     // Darker ground strip
     setColor(0.25f, 0.55f, 0.15f);
     drawRect(0, 0, WIN_W, 50);
+
+    // Clouds
+    setColor(1, 1, 1);
+    auto cloud = [](float cx, float cy) {
+        drawEllipse(cx, cy, 40, 20);
+        drawEllipse(cx + 30, cy + 5, 30, 18);
+        drawEllipse(cx - 30, cy + 5, 30, 18);
+        drawEllipse(cx + 10, cy + 15, 25, 15);
+    };
+    cloud(150, 480);
+    cloud(450, 510);
+    cloud(650, 460);
+
+    // Sun
+    setColor(1.0f, 0.95f, 0.3f);
+    drawCircle(WIN_W - 60, WIN_H - 60, 35);
 }
 
 void display() {
