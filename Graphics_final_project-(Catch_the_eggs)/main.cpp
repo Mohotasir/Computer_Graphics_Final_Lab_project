@@ -106,10 +106,85 @@ void drawBackground() {
     drawCircle(WIN_W - 60, WIN_H - 60, 35);
 }
 
+void drawStick(float y) {
+    // Stick body
+    setColor(0.6f, 0.4f, 0.1f);
+    drawRect(STICK_X1, y - 4, STICK_X2 - STICK_X1, 8);
+
+    // Bamboo nodes
+    setColor(0.5f, 0.35f, 0.08f);
+    for (float x = STICK_X1 + 80; x < STICK_X2; x += 80) {
+        drawRect(x - 3, y - 7, 6, 14);
+    }
+}
+
+// ─── Draw chicken ─────────────────────────────────────────────────────────────
+void drawChicken(float cx, float cy, bool facingRight) {
+    float flip = facingRight ? 1.0f : -1.0f;
+
+    // Body
+    setColor(0.9f, 0.7f, 0.3f);
+    drawEllipse(cx, cy, 22, 18);
+
+    // Head
+    setColor(0.95f, 0.8f, 0.4f);
+    drawCircle(cx + flip * 18, cy + 12, 12);
+
+    // Eye
+    setColor(0.1f, 0.1f, 0.1f);
+    drawCircle(cx + flip * 21, cy + 14, 2.5f);
+
+    // Beak
+    setColor(1.0f, 0.6f, 0.1f);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(cx + flip * 28, cy + 12);
+    glVertex2f(cx + flip * 34, cy + 14);
+    glVertex2f(cx + flip * 28, cy + 10);
+    glEnd();
+
+    // Comb (red)
+    setColor(0.9f, 0.1f, 0.1f);
+    drawCircle(cx + flip * 16, cy + 23, 5);
+    drawCircle(cx + flip * 20, cy + 25, 4);
+    drawCircle(cx + flip * 13, cy + 22, 4);
+
+    // Wing
+    setColor(0.8f, 0.6f, 0.2f);
+    drawEllipse(cx - flip * 5, cy + 2, 14, 10);
+
+    // Tail feathers
+    setColor(0.7f, 0.5f, 0.15f);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(cx - flip * 18, cy + 8);
+    glVertex2f(cx - flip * 35, cy + 20);
+    glVertex2f(cx - flip * 30, cy + 2);
+    glEnd();
+    glBegin(GL_TRIANGLES);
+    glVertex2f(cx - flip * 18, cy + 2);
+    glVertex2f(cx - flip * 35, cy + 5);
+    glVertex2f(cx - flip * 28, cy - 8);
+    glEnd();
+
+    // Feet
+    setColor(1.0f, 0.6f, 0.1f);
+    drawRect(cx + flip * 5 - 3,  cy - 18, 5, 10);
+    drawRect(cx - flip * 5 - 3,  cy - 18, 5, 10);
+}
+
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     drawBackground();
+
+    for (int i = 0; i < NUM_STICKS; i++) {
+        drawStick(STICK_Y[i]);
+    }
+     // Draw test chickens
+    drawChicken(200, STICK_Y[0] + 10, true);
+    drawChicken(600, STICK_Y[1] + 10, false);
     glutSwapBuffers();
+
+
+
 }
 
 int main(int argc, char** argv) {
