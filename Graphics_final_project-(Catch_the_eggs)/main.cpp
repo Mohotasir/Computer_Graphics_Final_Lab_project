@@ -15,38 +15,38 @@ const int WIN_W = 800;
 const int WIN_H = 600;
 
 // ─── Constants─────────
-const int   NUM_STICKS    = 2;
-const float STICK_Y[2]    = {540.f, 500.f}; // y positions of sticks
-const float STICK_X1      = 50.f;
-const float STICK_X2      = 750.f;
-const float BASKET_Y      = 60.f;
-const float BASKET_W_DEF  = 80.f;
-const float BASKET_H      = 30.f;
-const float EGG_R         = 12.f;
-const float PERK_W        = 22.f;
-const float PERK_H        = 22.f;
+const int   NUM_STICKS = 2;
+const float STICK_Y[2] = { 540.f, 500.f }; // y positions of sticks
+const float STICK_X1 = 50.f;
+const float STICK_X2 = 750.f;
+const float BASKET_Y = 60.f;
+const float BASKET_W_DEF = 80.f;
+const float BASKET_H = 30.f;
+const float EGG_R = 12.f;
+const float PERK_W = 22.f;
+const float PERK_H = 22.f;
 const int   GAME_DURATION = 120;
 const float BASE_FALL_SPD = 2.8f;
 
 
 
 
-float basketX      = WIN_W / 2.0f;
-float basketW      = BASKET_W_DEF;
-float fallSpeed    = BASE_FALL_SPD;
-int   score        = 0;
-int   highScore    = 0;
-int   timeLeft     = GAME_DURATION;
-int   lastTimeSec  = 0;
+float basketX = WIN_W / 2.0f;
+float basketW = BASKET_W_DEF;
+float fallSpeed = BASE_FALL_SPD;
+int   score = 0;
+int   highScore = 0;
+int   timeLeft = GAME_DURATION;
+int   lastTimeSec = 0;
 
-bool  shieldActive    = false;
-float shieldTimer     = 0;
-bool  doublePoints    = false;
-float doubleTimer     = 0;
-bool  wideActive      = false;
-float wideTimer       = 0;
-bool  slowActive      = false;
-float slowTimer       = 0;
+bool  shieldActive = false;
+float shieldTimer = 0;
+bool  doublePoints = false;
+float doubleTimer = 0;
+bool  wideActive = false;
+float wideTimer = 0;
+bool  slowActive = false;
+float slowTimer = 0;
 
 
 
@@ -117,7 +117,7 @@ void drawBackground() {
         drawEllipse(cx + 30, cy + 5, 30, 18);
         drawEllipse(cx - 30, cy + 5, 30, 18);
         drawEllipse(cx + 10, cy + 15, 25, 15);
-    };
+        };
     cloud(150, 480);
     cloud(450, 510);
     cloud(650, 460);
@@ -188,8 +188,8 @@ void drawChicken(float cx, float cy, bool facingRight) {
 
     // Feet
     setColor(1.0f, 0.6f, 0.1f);
-    drawRect(cx + flip * 5 - 3,  cy - 18, 5, 10);
-    drawRect(cx - flip * 5 - 3,  cy - 18, 5, 10);
+    drawRect(cx + flip * 5 - 3, cy - 18, 5, 10);
+    drawRect(cx - flip * 5 - 3, cy - 18, 5, 10);
 }
 
 
@@ -249,7 +249,7 @@ void display() {
     for (int i = 0; i < NUM_STICKS; i++) {
         drawStick(STICK_Y[i]);
     }
-     // Draw test chickens
+    // Draw test chickens
     drawChicken(200, STICK_Y[0] + 10, true);
     drawChicken(600, STICK_Y[1] + 10, false);
 
@@ -258,7 +258,7 @@ void display() {
 
 
 
-}
+}// display complete
 
 int main(int argc, char** argv) {
     srand((unsigned)time(nullptr));
