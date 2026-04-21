@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1776697582 source:c:\users\mohot\onedrive\desktop\uap\4.2\cgraphics_final_lab_project\graphics_final_project-(catch_the_eggs)\main.cpp
+1776704275 source:c:\users\mohot\onedrive\desktop\uap\4.2\cgraphics_final_lab_project\graphics_final_project-(catch_the_eggs)\main.cpp
 	<windows.h>
 	<GL/glut.h>
 	<cmath>

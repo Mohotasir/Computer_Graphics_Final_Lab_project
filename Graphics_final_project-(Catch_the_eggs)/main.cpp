@@ -124,7 +124,7 @@ void drawBackground() {
 
     // Sun
     setColor(0.9f, 0.99f, 0.3f);
-    drawCircle(WIN_W - 60, WIN_H - 60, 35);
+    drawCircle(WIN_W - 50, WIN_H - 40, 35);
 }
 
 void drawStick(float y) {
@@ -144,11 +144,11 @@ void drawChicken(float cx, float cy, bool facingRight) {
     float flip = facingRight ? 1.0f : -1.0f;
 
     // Body
-    setColor(0.9f, 0.7f, 0.3f);
+    setColor(0.9f, 0.9f, 0.8f);
     drawEllipse(cx, cy, 22, 18);
 
     // Head
-    setColor(0.95f, 0.8f, 0.4f);
+    setColor(0.95f, 0.9f, 0.9f);
     drawCircle(cx + flip * 18, cy + 12, 12);
 
     // Eye
@@ -156,25 +156,25 @@ void drawChicken(float cx, float cy, bool facingRight) {
     drawCircle(cx + flip * 21, cy + 14, 2.5f);
 
     // Beak
-    setColor(1.0f, 0.6f, 0.1f);
+    setColor(.70f, 0.3f, 0.1f);
     glBegin(GL_TRIANGLES);
     glVertex2f(cx + flip * 28, cy + 12);
     glVertex2f(cx + flip * 34, cy + 14);
-    glVertex2f(cx + flip * 28, cy + 10);
+    glVertex2f(cx + flip * 28, cy + 20);
     glEnd();
 
     // Comb (red)
-    setColor(0.9f, 0.1f, 0.1f);
+    setColor(0.7f, 0.1f, 0.1f);
     drawCircle(cx + flip * 16, cy + 23, 5);
     drawCircle(cx + flip * 20, cy + 25, 4);
     drawCircle(cx + flip * 13, cy + 22, 4);
 
     // Wing
-    setColor(0.8f, 0.6f, 0.2f);
+    setColor(0.7f, 0.5f, 0.5f);
     drawEllipse(cx - flip * 5, cy + 2, 14, 10);
 
     // Tail feathers
-    setColor(0.7f, 0.5f, 0.15f);
+    setColor(0.9f, 0.9f, 0.9f);
     glBegin(GL_TRIANGLES);
     glVertex2f(cx - flip * 18, cy + 8);
     glVertex2f(cx - flip * 35, cy + 20);
