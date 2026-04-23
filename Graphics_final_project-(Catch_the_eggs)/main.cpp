@@ -28,7 +28,40 @@ const float PERK_H = 22.f;
 const int   GAME_DURATION = 120;
 const float BASE_FALL_SPD = 2.8f;
 
+enum EggType { EGG_NORMAL, EGG_GOLD, EGG_BLUE, EGG_POOP };
+int eggPoints(EggType t) {
+    switch(t) {
+        case EGG_NORMAL: return 1;
+        case EGG_GOLD:   return 10;
+        case EGG_BLUE:   return 5;
+        case EGG_POOP:   return -10;
+        default:         return 0;
+    }
+}
 
+struct Chicken {
+    float x;
+    float dir;   // +1 or -1
+    float speed;
+};
+
+struct Particle {
+    float x, y, vx, vy;
+    float r, g, b;
+    float life;   // 0..1
+    bool  active;
+};
+
+struct Airflow {
+    float strength;  // horizontal push per frame
+    float timer;     // remaining frames
+    bool  active;
+};
+
+Chicken chickens[NUM_STICKS];
+//std::vector<FallingObject> objects;
+std::vector<Particle> particles;
+Airflow airflow = {0, 0, false};
 
 
 float basketX = WIN_W / 2.0f;
