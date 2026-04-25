@@ -241,6 +241,52 @@ void drawStick(float y) {
     }
 }
 
+
+void drawEgg(float cx, float cy, EggType t) {
+    // Egg shape (ellipse, slightly pointed top)
+    switch(t) {
+        case EGG_GOLD:
+            setColor(1.0f, 0.85f, 0.1f);
+            drawEllipse(cx, cy, EGG_R, EGG_R * 1.3f);
+            setColor(1.0f, 1.0f, 0.6f);
+            drawEllipse(cx - 3, cy + 4, EGG_R * 0.4f, EGG_R * 0.5f);
+            // Star sparkle
+            setColor(1.0f, 1.0f, 1.0f);
+            drawCircle(cx + 5, cy + 8, 2);
+            break;
+        case EGG_BLUE:
+            setColor(0.2f, 0.5f, 1.0f);
+            drawEllipse(cx, cy, EGG_R, EGG_R * 1.3f);
+            setColor(0.6f, 0.8f, 1.0f);
+            drawEllipse(cx - 3, cy + 4, EGG_R * 0.4f, EGG_R * 0.5f);
+            break;
+        case EGG_POOP:
+            setColor(0.45f, 0.30f, 0.10f);
+            // Poop swirl shape
+            drawCircle(cx, cy, EGG_R * 0.9f);
+            setColor(0.55f, 0.38f, 0.15f);
+            drawCircle(cx, cy + 8, EGG_R * 0.7f);
+            setColor(0.60f, 0.42f, 0.18f);
+            drawCircle(cx, cy + 14, EGG_R * 0.5f);
+            // Stink lines
+            setColor(0.7f, 0.85f, 0.3f);
+            glLineWidth(1.5f);
+            glBegin(GL_LINES);
+            glVertex2f(cx - 10, cy + 20); glVertex2f(cx - 14, cy + 30);
+            glVertex2f(cx,      cy + 22); glVertex2f(cx,      cy + 32);
+            glVertex2f(cx + 10, cy + 20); glVertex2f(cx + 14, cy + 30);
+            glEnd();
+            glLineWidth(1.0f);
+            break;
+        default: // EGG_NORMAL
+            setColor(0.97f, 0.97f, 0.9f);
+            drawEllipse(cx, cy, EGG_R, EGG_R * 1.3f);
+            setColor(1.0f, 1.0f, 1.0f);
+            drawEllipse(cx - 3, cy + 4, EGG_R * 0.35f, EGG_R * 0.45f);
+            break;
+    }
+}
+
 // ─── Draw chicken ─────────────────────────────────────────────────────────────
 void drawChicken(float cx, float cy, bool facingRight) {
     float flip = facingRight ? 1.0f : -1.0f;
