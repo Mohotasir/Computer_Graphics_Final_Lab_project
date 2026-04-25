@@ -320,7 +320,7 @@ void drawChicken(float cx, float cy, bool facingRight) {
     setColor(0.7f, 0.5f, 0.5f);
     drawEllipse(cx - flip * 5, cy + 2, 14, 10);
 
-    // Tail feathers
+
     setColor(0.9f, 0.9f, 0.9f);
     glBegin(GL_TRIANGLES);
     glVertex2f(cx - flip * 18, cy + 8);
@@ -333,7 +333,7 @@ void drawChicken(float cx, float cy, bool facingRight) {
     glVertex2f(cx - flip * 28, cy - 8);
     glEnd();
 
-    // Feet
+   
     setColor(1.0f, 0.6f, 0.1f);
     drawRect(cx + flip * 5 - 3, cy - 18, 5, 10);
     drawRect(cx - flip * 5 - 3, cy - 18, 5, 10);
