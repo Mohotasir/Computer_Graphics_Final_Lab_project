@@ -388,6 +388,53 @@ void drawPerk(float cx, float cy, PerkType t) {
     }
     drawText(cx - 7, cy - 5, lbl, GLUT_BITMAP_HELVETICA_12);
 }
+
+void drawHUD() {
+    // Top bar background
+    setColor(0.1f, 0.1f, 0.1f, 0.7f);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    drawRect(0, WIN_H - 45, WIN_W, 45);
+    glDisable(GL_BLEND);
+
+    // Score
+    setColor(1, 1, 1);
+    std::string scoreStr = "Score: " + std::to_string(score);
+    drawTextLarge(10, WIN_H - 28, scoreStr);
+
+    // Timer
+    int mins = timeLeft / 60, secs = timeLeft % 60;
+    char tbuf[16];
+    snprintf(tbuf, sizeof(tbuf), "Time: %d:%02d", mins, secs);
+    setColor(timeLeft <= 10 ? 1.0f : 1.0f,
+             timeLeft <= 10 ? 0.2f : 1.0f,
+             timeLeft <= 10 ? 0.2f : 1.0f);
+    drawTextLarge(WIN_W / 2 - 50, WIN_H - 28, tbuf);
+
+    // High score
+    setColor(1.0f, 0.85f, 0.1f);
+    std::string hsStr = "Best: " + std::to_string(highScore);
+    drawTextLarge(WIN_W - 130, WIN_H - 28, hsStr);
+
+    // Active perks display
+    float px = 5;
+    setColor(0.3f, 1.0f, 0.3f);
+    if (wideActive) { drawText(px, WIN_H - 52, "[WIDE]", GLUT_BITMAP_HELVETICA_12); px += 55; }
+    setColor(0.3f, 0.7f, 1.0f);
+    if (slowActive) { drawText(px, WIN_H - 52, "[SLOW]", GLUT_BITMAP_HELVETICA_12); px += 55; }
+    setColor(0.8f, 0.3f, 1.0f);
+    if (shieldActive) { drawText(px, WIN_H - 52, "[SHIELD]", GLUT_BITMAP_HELVETICA_12); px += 65; }
+    setColor(1.0f, 0.4f, 0.4f);
+    if (doublePoints) { drawText(px, WIN_H - 52, "[2x PTS]", GLUT_BITMAP_HELVETICA_12); }
+
+    // Airflow indicator
+    if (airflow.active) {
+        setColor(0.7f, 0.95f, 1.0f);
+        std::string aStr = airflow.strength > 0 ? "Wind >> " : "<< Wind";
+        drawText(WIN_W / 2 - 30, WIN_H - 52, aStr, GLUT_BITMAP_HELVETICA_12);
+    }
+}
+
 void drawBasket(float bx, float bw) {
     float bx1 = bx - bw / 2, bx2 = bx + bw / 2;
     float by1 = BASKET_Y, by2 = BASKET_Y + BASKET_H;
