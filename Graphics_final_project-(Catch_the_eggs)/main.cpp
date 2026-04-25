@@ -44,7 +44,7 @@ enum PerkType { PERK_WIDE, PERK_SLOW, PERK_TIME, PERK_SHIELD, PERK_DOUBLE };
 
 struct FallingObject {
     float x, y;
-    float vx, vy;  
+    float vx, vy;
     EggType eggType;
     bool   isPerk;
     PerkType perkType;
@@ -72,7 +72,7 @@ struct Airflow {
 };
 
 Chicken chickens[NUM_STICKS];
-//std::vector<FallingObject> objects;
+std::vector<FallingObject> objects;
 std::vector<Particle> particles;
 Airflow airflow = {0, 0, false};
 
@@ -95,66 +95,9 @@ float wideTimer = 0;
 bool  slowActive = false;
 float slowTimer = 0;
 
-int   menuSelected    = 0; // 0=Start,1=HighScore,2=Help,3=Exit
-int   pauseSelected   = 0;
 
-float randF(float lo, float hi) {
-    return lo + (hi - lo) * (rand() / (float)RAND_MAX);
-}
 
-void spawnEgg(int stickIdx) {
-    FallingObject o;
-    o.stickIdx = stickIdx;
-    o.x  = chickens[stickIdx].x;
-    o.y  = STICK_Y[stickIdx] - 10.f;
-    o.vx = 0;
-    o.vy = -(fallSpeed + randF(0, 1.0f));
-    o.active  = true;
-    o.isPerk  = false;
 
-    float r = randF(0, 1.0f);
-    if      (r < 0.05f) o.eggType = EGG_GOLD;
-    else if (r < 0.20f) o.eggType = EGG_BLUE;
-    else if (r < 0.30f) o.eggType = EGG_POOP;
-    else                o.eggType = EGG_NORMAL;
-
-    objects.push_back(o);
-}
-
-void spawnPerk() {
-    FallingObject o;
-    o.x  = randF(60, WIN_W - 60);
-    o.y  = WIN_H - 20.f;
-    o.vx = 0;
-    o.vy = -(BASE_FALL_SPD * 0.7f);
-    o.active  = true;
-    o.isPerk  = true;
-    o.stickIdx = 0;
-
-    float r = randF(0, 1.0f);
-    if      (r < 0.25f) o.perkType = PERK_WIDE;
-    else if (r < 0.50f) o.perkType = PERK_SLOW;
-    else if (r < 0.70f) o.perkType = PERK_TIME;
-    else if (r < 0.85f) o.perkType = PERK_SHIELD;
-    else                o.perkType = PERK_DOUBLE;
-
-    objects.push_back(o);
-}
-
-void spawnParticles(float x, float y, float r, float g, float b, int n = 12) {
-    for (int i = 0; i < n; i++) {
-        Particle p;
-        p.x = x; p.y = y;
-        float angle = randF(0, 2 * 3.14159f);
-        float speed = randF(1, 4);
-        p.vx = cosf(angle) * speed;
-        p.vy = sinf(angle) * speed;
-        p.r = r; p.g = g; p.b = b;
-        p.life = 1.0f;
-        p.active = true;
-        particles.push_back(p);
-    }
-}
 
 
 
@@ -256,62 +199,16 @@ void drawStick(float y) {
     }
 }
 
-void drawEgg(float cx, float cy, EggType t) {
-    // Egg shape (ellipse, slightly pointed top)
-    switch(t) {
-        case EGG_GOLD:
-            setColor(1.0f, 0.85f, 0.1f);
-            drawEllipse(cx, cy, EGG_R, EGG_R * 1.3f);
-            setColor(1.0f, 1.0f, 0.6f);
-            drawEllipse(cx - 3, cy + 4, EGG_R * 0.4f, EGG_R * 0.5f);
-            // Star sparkle
-            setColor(1.0f, 1.0f, 1.0f);
-            drawCircle(cx + 5, cy + 8, 2);
-            break;
-        case EGG_BLUE:
-            setColor(0.2f, 0.5f, 1.0f);
-            drawEllipse(cx, cy, EGG_R, EGG_R * 1.3f);
-            setColor(0.6f, 0.8f, 1.0f);
-            drawEllipse(cx - 3, cy + 4, EGG_R * 0.4f, EGG_R * 0.5f);
-            break;
-        case EGG_POOP:
-            setColor(0.45f, 0.30f, 0.10f);
-            // Poop swirl shape
-            drawCircle(cx, cy, EGG_R * 0.9f);
-            setColor(0.55f, 0.38f, 0.15f);
-            drawCircle(cx, cy + 8, EGG_R * 0.7f);
-            setColor(0.60f, 0.42f, 0.18f);
-            drawCircle(cx, cy + 14, EGG_R * 0.5f);
-            // Stink lines
-            setColor(0.7f, 0.85f, 0.3f);
-            glLineWidth(1.5f);
-            glBegin(GL_LINES);
-            glVertex2f(cx - 10, cy + 20); glVertex2f(cx - 14, cy + 30);
-            glVertex2f(cx,      cy + 22); glVertex2f(cx,      cy + 32);
-            glVertex2f(cx + 10, cy + 20); glVertex2f(cx + 14, cy + 30);
-            glEnd();
-            glLineWidth(1.0f);
-            break;
-        default: // EGG_NORMAL
-            setColor(0.97f, 0.97f, 0.9f);
-            drawEllipse(cx, cy, EGG_R, EGG_R * 1.3f);
-            setColor(1.0f, 1.0f, 1.0f);
-            drawEllipse(cx - 3, cy + 4, EGG_R * 0.35f, EGG_R * 0.45f);
-            break;
-    }
-}
-
-
 // ─── Draw chicken ─────────────────────────────────────────────────────────────
 void drawChicken(float cx, float cy, bool facingRight) {
     float flip = facingRight ? 1.0f : -1.0f;
 
     // Body
-    setColor(0.9f, 0.7f, 0.3f);
+    setColor(0.9f, 0.9f, 0.8f);
     drawEllipse(cx, cy, 22, 18);
 
     // Head
-    setColor(0.95f, 0.8f, 0.4f);
+    setColor(0.95f, 0.9f, 0.9f);
     drawCircle(cx + flip * 18, cy + 12, 12);
 
     // Eye
@@ -319,25 +216,25 @@ void drawChicken(float cx, float cy, bool facingRight) {
     drawCircle(cx + flip * 21, cy + 14, 2.5f);
 
     // Beak
-    setColor(1.0f, 0.6f, 0.1f);
+    setColor(0.7f, 0.3f, 0.1f);
     glBegin(GL_TRIANGLES);
     glVertex2f(cx + flip * 28, cy + 12);
     glVertex2f(cx + flip * 34, cy + 14);
-    glVertex2f(cx + flip * 28, cy + 10);
+    glVertex2f(cx + flip * 28, cy + 20);
     glEnd();
 
     // Comb (red)
-    setColor(0.9f, 0.1f, 0.1f);
+    setColor(0.7f, 0.1f, 0.1f);
     drawCircle(cx + flip * 16, cy + 23, 5);
     drawCircle(cx + flip * 20, cy + 25, 4);
     drawCircle(cx + flip * 13, cy + 22, 4);
 
     // Wing
-    setColor(0.8f, 0.6f, 0.2f);
+    setColor(0.7f, 0.5f, 0.5f);
     drawEllipse(cx - flip * 5, cy + 2, 14, 10);
 
     // Tail feathers
-    setColor(0.7f, 0.5f, 0.15f);
+    setColor(0.9f, 0.9f, 0.9f);
     glBegin(GL_TRIANGLES);
     glVertex2f(cx - flip * 18, cy + 8);
     glVertex2f(cx - flip * 35, cy + 20);
@@ -355,7 +252,40 @@ void drawChicken(float cx, float cy, bool facingRight) {
     drawRect(cx - flip * 5 - 3, cy - 18, 5, 10);
 }
 
+void drawPerk(float cx, float cy, PerkType t) {
+    float hw = PERK_W / 2, hh = PERK_H / 2;
 
+    // Block background
+    switch(t) {
+        case PERK_WIDE:   setColor(0.2f, 0.9f, 0.4f); break;
+        case PERK_SLOW:   setColor(0.2f, 0.7f, 1.0f); break;
+        case PERK_TIME:   setColor(1.0f, 0.8f, 0.1f); break;
+        case PERK_SHIELD: setColor(0.8f, 0.3f, 1.0f); break;
+        case PERK_DOUBLE: setColor(1.0f, 0.4f, 0.4f); break;
+    }
+    drawRect(cx - hw, cy - hh, PERK_W, PERK_H);
+
+    // Border
+    setColor(1, 1, 1);
+    glLineWidth(2.0f);
+    glBegin(GL_LINE_LOOP);
+    glVertex2f(cx - hw, cy - hh); glVertex2f(cx + hw, cy - hh);
+    glVertex2f(cx + hw, cy + hh); glVertex2f(cx - hw, cy + hh);
+    glEnd();
+    glLineWidth(1.0f);
+
+    // Icon letter
+    setColor(1, 1, 1);
+    std::string lbl;
+    switch(t) {
+        case PERK_WIDE:   lbl = "W"; break;
+        case PERK_SLOW:   lbl = "S"; break;
+        case PERK_TIME:   lbl = "+T"; break;
+        case PERK_SHIELD: lbl = "SH"; break;
+        case PERK_DOUBLE: lbl = "2x"; break;
+    }
+    drawText(cx - 7, cy - 5, lbl, GLUT_BITMAP_HELVETICA_12);
+}
 void drawBasket(float bx, float bw) {
     float bx1 = bx - bw / 2, bx2 = bx + bw / 2;
     float by1 = BASKET_Y, by2 = BASKET_Y + BASKET_H;
