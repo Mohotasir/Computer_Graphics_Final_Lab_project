@@ -141,6 +141,21 @@ void spawnPerk() {
     objects.push_back(o);
 }
 
+void spawnParticles(float x, float y, float r, float g, float b, int n = 12) {
+    for (int i = 0; i < n; i++) {
+        Particle p;
+        p.x = x; p.y = y;
+        float angle = randF(0, 2 * 3.14159f);
+        float speed = randF(1, 4);
+        p.vx = cosf(angle) * speed;
+        p.vy = sinf(angle) * speed;
+        p.r = r; p.g = g; p.b = b;
+        p.life = 1.0f;
+        p.active = true;
+        particles.push_back(p);
+    }
+}
+
 
 void reshape(int w, int h) {
     glViewport(0, 0, w, h);
