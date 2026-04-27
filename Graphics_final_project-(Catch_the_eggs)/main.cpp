@@ -505,26 +505,31 @@ void drawBasket(float bx, float bw) {
     }
 }
 
-void drawPanel(float x, float y, float w, float h) {
-    // Shadow
-    setColor(0, 0, 0, 0.5f);
+
+void drawMenuButton(float x, float y, float w, float h, const std::string& label, bool selected) {
+    if (selected) {
+        setColor(0.3f, 0.6f, 1.0f, 0.9f);
+    } else {
+        setColor(0.2f, 0.2f, 0.35f, 0.9f);
+    }
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    drawRect(x + 5, y - 5, w, h);
-
-    // Panel
-    setColor(0.12f, 0.12f, 0.22f, 0.92f);
     drawRect(x, y, w, h);
     glDisable(GL_BLEND);
 
-    // Border
-    setColor(0.5f, 0.7f, 1.0f);
-    glLineWidth(2.0f);
+    setColor(selected ? 1.0f : 0.8f,
+             selected ? 1.0f : 0.8f,
+             selected ? 1.0f : 0.8f);
+    glLineWidth(selected ? 2.5f : 1.5f);
     glBegin(GL_LINE_LOOP);
     glVertex2f(x, y); glVertex2f(x + w, y);
     glVertex2f(x + w, y + h); glVertex2f(x, y + h);
     glEnd();
     glLineWidth(1.0f);
+
+    setColor(1, 1, 1);
+    float tx = x + w / 2 - label.size() * 7;
+    drawTextLarge(tx, y + h / 2 - 8, label);
 }
 
 void display() {
