@@ -616,6 +616,39 @@ void drawHighScorePage() {
     drawText(WIN_W/2 - 80, WIN_H/2 - 70, "Press ESC to go back", GLUT_BITMAP_HELVETICA_18);
 }
 
+void drawHelpPage() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawBackground();
+    drawPanel(60, 80, WIN_W - 120, WIN_H - 160);
+
+    setColor(1.0f, 0.85f, 0.1f);
+    drawTextLarge(WIN_W/2 - 40, WIN_H - 100, "HELP");
+
+    setColor(1, 1, 1);
+    float lx = 100, ly = WIN_H - 140;
+    float step = 28;
+    drawText(lx, ly,         "Controls:", GLUT_BITMAP_HELVETICA_18); ly -= step;
+    drawText(lx, ly,         "  Left/Right Arrow OR A/D  - Move basket", GLUT_BITMAP_HELVETICA_18); ly -= step;
+    drawText(lx, ly,         "  Mouse Move               - Basket follows cursor", GLUT_BITMAP_HELVETICA_18); ly -= step;
+    drawText(lx, ly,         "  P or SPACE               - Pause / Resume", GLUT_BITMAP_HELVETICA_18); ly -= step;
+    drawText(lx, ly,         "  ESC                      - Back to menu", GLUT_BITMAP_HELVETICA_18); ly -= step * 1.5f;
+
+    drawText(lx, ly,         "Egg Types:", GLUT_BITMAP_HELVETICA_18); ly -= step;
+    drawEgg(lx + 10, ly + 5, EGG_GOLD);    drawText(lx + 30, ly, "Golden Egg   +10 pts", GLUT_BITMAP_HELVETICA_18); ly -= step;
+    drawEgg(lx + 10, ly + 5, EGG_BLUE);    drawText(lx + 30, ly, "Blue Egg     +5 pts",  GLUT_BITMAP_HELVETICA_18); ly -= step;
+    drawEgg(lx + 10, ly + 5, EGG_NORMAL);  drawText(lx + 30, ly, "Normal Egg   +1 pt",   GLUT_BITMAP_HELVETICA_18); ly -= step;
+    drawEgg(lx + 10, ly + 5, EGG_POOP);    drawText(lx + 30, ly, "Poop         -10 pts", GLUT_BITMAP_HELVETICA_18); ly -= step * 1.5f;
+
+    drawText(lx, ly,         "Perks (coloured blocks):", GLUT_BITMAP_HELVETICA_18); ly -= step;
+    drawPerk(lx + 11, ly + 5, PERK_WIDE);   drawText(lx + 30, ly, "W  = Wide basket",   GLUT_BITMAP_HELVETICA_18); ly -= step;
+    drawPerk(lx + 11, ly + 5, PERK_SLOW);   drawText(lx + 30, ly, "S  = Slow eggs",     GLUT_BITMAP_HELVETICA_18); ly -= step;
+    drawPerk(lx + 11, ly + 5, PERK_TIME);   drawText(lx + 30, ly, "+T = Extra 15 secs", GLUT_BITMAP_HELVETICA_18); ly -= step;
+    drawPerk(lx + 11, ly + 5, PERK_SHIELD); drawText(lx + 30, ly, "SH = Shield (poop ignored)", GLUT_BITMAP_HELVETICA_18); ly -= step;
+    drawPerk(lx + 11, ly + 5, PERK_DOUBLE); drawText(lx + 30, ly, "2x = Double points", GLUT_BITMAP_HELVETICA_18); ly -= step * 1.5f;
+
+    setColor(0.6f, 0.8f, 1.0f);
+    drawText(WIN_W/2 - 90, 100, "Press ESC to go back", GLUT_BITMAP_HELVETICA_18);
+}
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
