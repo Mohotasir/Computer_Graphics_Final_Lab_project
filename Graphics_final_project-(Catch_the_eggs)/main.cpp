@@ -591,6 +591,32 @@ void drawMainMenu() {
     drawText(WIN_W/2 - 90, WIN_H/2 - 125, "Press ENTER to select", GLUT_BITMAP_HELVETICA_12);
 }
 
+void drawHighScorePage() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawBackground();
+    drawPanel(WIN_W/2 - 180, WIN_H/2 - 140, 360, 280);
+
+    setColor(1.0f, 0.85f, 0.1f);
+    drawTextLarge(WIN_W/2 - 85, WIN_H/2 + 110, "HIGH SCORE");
+
+    // Trophy icon
+    setColor(1.0f, 0.85f, 0.1f);
+    drawCircle(WIN_W/2, WIN_H/2 + 55, 30);
+    setColor(0.8f, 0.6f, 0.1f);
+    drawRect(WIN_W/2 - 20, WIN_H/2 + 15, 40, 10);
+    drawRect(WIN_W/2 - 10, WIN_H/2 + 5,  20, 12);
+
+    setColor(1, 1, 1);
+    drawTextLarge(WIN_W/2 - 40, WIN_H/2 + 10, std::to_string(highScore));
+
+    setColor(0.8f, 0.9f, 1.0f);
+    drawText(WIN_W/2 - 30, WIN_H/2 - 20, "Score", GLUT_BITMAP_HELVETICA_18);
+
+    setColor(0.6f, 0.8f, 1.0f);
+    drawText(WIN_W/2 - 80, WIN_H/2 - 70, "Press ESC to go back", GLUT_BITMAP_HELVETICA_18);
+}
+
+
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     drawBackground();
