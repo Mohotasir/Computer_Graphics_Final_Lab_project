@@ -653,7 +653,26 @@ void drawHelpPage() {
     drawText(WIN_W/2 - 90, 100, "Press ESC to go back", GLUT_BITMAP_HELVETICA_18);
 }
 
+void drawPauseScreen() {
+    // Dim overlay
+    setColor(0, 0, 0, 0.6f);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    drawRect(0, 0, WIN_W, WIN_H);
+    glDisable(GL_BLEND);
 
+    drawPanel(WIN_W/2 - 160, WIN_H/2 - 110, 320, 220);
+
+    setColor(1.0f, 0.85f, 0.1f);
+    drawTextLarge(WIN_W/2 - 55, WIN_H/2 + 85, "PAUSED");
+
+    float bx = WIN_W/2 - 110, bw = 220, bh = 40;
+    drawMenuButton(bx, WIN_H/2 + 20, bw, bh, "RESUME",      pauseSelected == 0);
+    drawMenuButton(bx, WIN_H/2 - 35, bw, bh, "MAIN MENU",   pauseSelected == 1);
+
+    setColor(0.6f, 0.8f, 1.0f);
+    drawText(WIN_W/2 - 90, WIN_H/2 - 80, "Arrow keys + ENTER", GLUT_BITMAP_HELVETICA_12);
+}
 
 void resetGame() {
     score = 0;
