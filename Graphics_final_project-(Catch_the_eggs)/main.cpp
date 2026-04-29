@@ -698,6 +698,34 @@ void resetGame() {
     }
 }
 
+void drawGameOver() {
+    setColor(0, 0, 0, 0.7f);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    drawRect(0, 0, WIN_W, WIN_H);
+    glDisable(GL_BLEND);
+
+    drawPanel(WIN_W/2 - 200, WIN_H/2 - 140, 400, 280);
+
+    setColor(1.0f, 0.3f, 0.3f);
+    drawTextLarge(WIN_W/2 - 75, WIN_H/2 + 110, "GAME OVER!");
+
+    setColor(1, 1, 1);
+    drawTextLarge(WIN_W/2 - 80, WIN_H/2 + 65, "Score: " + std::to_string(score));
+
+    if (score >= highScore) {
+        setColor(1.0f, 0.85f, 0.1f);
+        drawTextLarge(WIN_W/2 - 85, WIN_H/2 + 30, "NEW HIGH SCORE!");
+    } else {
+        setColor(0.8f, 0.9f, 1.0f);
+        drawTextLarge(WIN_W/2 - 80, WIN_H/2 + 30, "Best: " + std::to_string(highScore));
+    }
+
+    setColor(0.6f, 0.8f, 1.0f);
+    drawText(WIN_W/2 - 100, WIN_H/2 - 30, "Press ENTER to play again", GLUT_BITMAP_HELVETICA_18);
+    drawText(WIN_W/2 - 80,  WIN_H/2 - 60, "Press ESC for menu", GLUT_BITMAP_HELVETICA_18);
+}
+
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     drawBackground();
