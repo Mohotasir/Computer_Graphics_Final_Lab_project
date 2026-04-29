@@ -14,6 +14,9 @@
 const int WIN_W = 800;
 const int WIN_H = 600;
 
+enum GameState { MENU, PLAYING, PAUSED, GAME_OVER, HIGH_SCORE_PAGE, HELP_PAGE };
+GameState gameState = MENU;
+
 // ─── Constants─────────
 const int   NUM_STICKS = 2;
 const float STICK_Y[2] = { 540.f, 500.f }; // y positions of sticks
@@ -650,6 +653,32 @@ void drawHelpPage() {
     drawText(WIN_W/2 - 90, 100, "Press ESC to go back", GLUT_BITMAP_HELVETICA_18);
 }
 
+
+
+void resetGame() {
+    score = 0;
+    timeLeft = GAME_DURATION;
+    basketX = WIN_W / 2.0f;
+    basketW = BASKET_W_DEF;
+    fallSpeed = BASE_FALL_SPD;
+    objects.clear();
+    particles.clear();
+    popups.clear();
+
+    shieldActive = false; shieldTimer = 0;
+    doublePoints = false; doubleTimer = 0;
+    wideActive   = false; wideTimer   = 0;
+    slowActive   = false; slowTimer   = 0;
+    airflow      = {0, 0, false};
+
+    // Init chickens
+    for (int i = 0; i < NUM_STICKS; i++) {
+        chickens[i].x     = STICK_X1 + (STICK_X2 - STICK_X1) * (i == 0 ? 0.3f : 0.6f);
+        chickens[i].dir   = (i % 2 == 0) ? 1.0f : -1.0f;
+        chickens[i].speed = 1.2f + i * 0.3f;
+    }
+}
+
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     drawBackground();
@@ -673,6 +702,58 @@ void display() {
 
 }// display complete
 
+void keyboard(unsigned char key, int, int) {
+    if (gameState == MENU) {
+        if (key == 13) { // ENTER
+            if (menuSelected == 0) { resetGame(); gameState = PLAYING; }
+            else if (menuSelected == 1) { gameState = HIGH_SCORE_PAGE; }
+            else if (menuSelected == 2) { gameState = HELP_PAGE; }
+            else if (menuSelected == 3) { exit(0); }
+        }
+        if (key == 27) exit(0);
+        return;
+    }
+    if (gameState == HIGH_SCORE_PAGE || gameState == HELP_PAGE) {
+        if (key == 27) gameState = MENU;
+        return;
+    }
+    if (gameState == GAME_OVER) {
+        if (key == 13) { resetGame(); gameState = PLAYING; }
+        if (key == 27) { gameState = MENU; }
+        return;
+    }
+    if (gameState == PAUSED) {
+        if (key == 13) {
+            if (pauseSelected == 0) gameState = PLAYING;
+            else { gameState = MENU; }
+        }
+        if (key == 27 || key == 'p' || key == 'P' || key == ' ')
+            gameState = PLAYING;
+        return;
+    }
+    // PLAYING
+    if (key == 'a' || key == 'A') basketX = std::max(basketW/2, basketX - 15.0f);
+    if (key == 'd' || key == 'D') basketX = std::min((float)WIN_W - basketW/2, basketX + 15.0f);
+    if (key == 'p' || key == 'P' || key == ' ') { gameState = PAUSED; pauseSelected = 0; }
+    if (key == 27) { gameState = MENU; }
+}
+
+void specialKey(int key, int, int) {
+    if (gameState == MENU) {
+        if (key == GLUT_KEY_DOWN) menuSelected = (menuSelected + 1) % 4;
+        if (key == GLUT_KEY_UP)   menuSelected = (menuSelected + 3) % 4;
+        return;
+    }
+    if (gameState == PAUSED) {
+        if (key == GLUT_KEY_DOWN) pauseSelected = (pauseSelected + 1) % 2;
+        if (key == GLUT_KEY_UP)   pauseSelected = (pauseSelected + 1) % 2;
+        return;
+    }
+    if (gameState == PLAYING) {
+        if (key == GLUT_KEY_LEFT)  basketX = std::max(basketW/2, basketX - 18.0f);
+        if (key == GLUT_KEY_RIGHT) basketX = std::min((float)WIN_W - basketW/2, basketX + 18.0f);
+    }
+}
 int main(int argc, char** argv) {
     srand((unsigned)time(nullptr));
 
