@@ -801,6 +801,38 @@ void specialKey(int key, int, int) {
         if (key == GLUT_KEY_RIGHT) basketX = std::min((float)WIN_W - basketW/2, basketX + 18.0f);
     }
 }
+
+void mouseMove(int x, int) {
+    if (gameState == PLAYING) {
+        basketX = std::max(basketW/2, std::min((float)WIN_W - basketW/2, (float)x));
+    }
+}
+
+void mouseClick(int button, int state, int mx, int my) {
+    float ry = WIN_H - my; // flip y
+    if (gameState == MENU && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        float bx = WIN_W/2 - 130, bw = 260, bh = 38, gap = 50;
+        float by = WIN_H/2 + 65;
+        for (int i = 0; i < 4; i++) {
+            float lby = by - i * gap;
+            if (mx > bx && mx < bx + bw && ry > lby && ry < lby + bh) {
+                menuSelected = i;
+                // Simulate enter
+                if (i == 0) { resetGame(); gameState = PLAYING; }
+                else if (i == 1) gameState = HIGH_SCORE_PAGE;
+                else if (i == 2) gameState = HELP_PAGE;
+                else exit(0);
+            }
+        }
+    }
+    if (gameState == PAUSED && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        float bx = WIN_W/2 - 110, bw = 220, bh = 40;
+        if (mx > bx && mx < bx + bw) {
+            if (ry > WIN_H/2 + 20 && ry < WIN_H/2 + 60) { pauseSelected = 0; gameState = PLAYING; }
+            if (ry > WIN_H/2 - 35 && ry < WIN_H/2 + 5)  { gameState = MENU; }
+        }
+    }
+}
 int main(int argc, char** argv) {
     srand((unsigned)time(nullptr));
 
