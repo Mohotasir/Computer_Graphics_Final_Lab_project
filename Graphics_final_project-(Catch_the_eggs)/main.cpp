@@ -737,6 +737,32 @@ void drawParticles() {
     glDisable(GL_BLEND);
 }
 
+void applyPerk(PerkType t) {
+    switch(t) {
+        case PERK_WIDE:
+            basketW = BASKET_W_DEF * 1.8f;
+            wideActive = true; wideTimer = 300;
+            spawnParticles(basketX, BASKET_Y + BASKET_H / 2, 0.2f, 1.0f, 0.4f);
+            break;
+        case PERK_SLOW:
+            fallSpeed = BASE_FALL_SPD * 0.45f;
+            slowActive = true; slowTimer = 400;
+            spawnParticles(basketX, BASKET_Y + BASKET_H / 2, 0.2f, 0.7f, 1.0f);
+            break;
+        case PERK_TIME:
+            timeLeft += 15;
+            spawnParticles(basketX, BASKET_Y + BASKET_H / 2, 1.0f, 0.85f, 0.1f, 20);
+            break;
+        case PERK_SHIELD:
+            shieldActive = true; shieldTimer = 500;
+            spawnParticles(basketX, BASKET_Y + BASKET_H / 2, 0.8f, 0.3f, 1.0f);
+            break;
+        case PERK_DOUBLE:
+            doublePoints = true; doubleTimer = 350;
+            spawnParticles(basketX, BASKET_Y + BASKET_H / 2, 1.0f, 0.4f, 0.4f);
+            break;
+    }
+}
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
