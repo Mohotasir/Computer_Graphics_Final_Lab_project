@@ -763,6 +763,15 @@ void applyPerk(PerkType t) {
             break;
     }
 }
+
+bool hitsBasket(const FallingObject& o) {
+    float bx1 = basketX - basketW / 2;
+    float bx2 = basketX + basketW / 2;
+    float by1 = BASKET_Y;
+    float by2 = BASKET_Y + BASKET_H;
+    return (o.x > bx1 - EGG_R && o.x < bx2 + EGG_R &&
+            o.y > by1 - EGG_R && o.y < by2 + EGG_R);
+}
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
