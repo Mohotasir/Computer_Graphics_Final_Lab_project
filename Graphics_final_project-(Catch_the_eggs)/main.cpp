@@ -758,7 +758,7 @@ void display() {
         if (o.isPerk) drawPerk(o.x, o.y, o.perkType);
         else          drawEgg(o.x,  o.y, o.eggType);
     }
-   //  drawParticles();
+   
     drawPopups();
    //drawParticles();
 
@@ -867,9 +867,19 @@ int main(int argc, char** argv) {
     glutCreateWindow("Catch The Eggs - CSE 426 Final Project");
 
     glClearColor(0.4f, 0.7f, 1.0f, 1.0f);
-
+    for (int i = 0; i < NUM_STICKS; i++) {
+        chickens[i].x     = STICK_X1 + (STICK_X2 - STICK_X1) * (i == 0 ? 0.3f : 0.6f);
+        chickens[i].dir   = (i % 2 == 0) ? 1.0f : -1.0f;
+        chickens[i].speed = 1.2f + i * 0.3f;
+    }
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
+    glutKeyboardFunc(keyboard);
+    glutSpecialFunc(specialKey);
+    glutPassiveMotionFunc(mouseMove);
+    glutMotionFunc(mouseMove);
+    glutMouseFunc(mouseClick);
+    //glutTimerFunc(16, timerCallback, 0);
     glutMainLoop();
 
 
