@@ -726,6 +726,17 @@ void drawGameOver() {
     drawText(WIN_W/2 - 80,  WIN_H/2 - 60, "Press ESC for menu", GLUT_BITMAP_HELVETICA_18);
 }
 
+void drawParticles() {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    for (auto& p : particles) {
+        if (!p.active) continue;
+        setColor(p.r, p.g, p.b, p.life);
+        drawCircle(p.x, p.y, 3.5f * p.life);
+    }
+    glDisable(GL_BLEND);
+}
+
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
