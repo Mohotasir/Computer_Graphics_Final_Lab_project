@@ -937,7 +937,7 @@ void display() {
     }
    
     drawPopups();
-   //drawParticles();
+   drawParticles();
 
     drawHUD();
     drawBasket(basketX, basketW);
