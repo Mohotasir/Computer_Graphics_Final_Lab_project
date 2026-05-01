@@ -1056,7 +1056,7 @@ int main(int argc, char** argv) {
     glutPassiveMotionFunc(mouseMove);
     glutMotionFunc(mouseMove);
     glutMouseFunc(mouseClick);
-    //glutTimerFunc(16, timerCallback, 0);
+    glutTimerFunc(16, timerCallback, 0);
     glutMainLoop();
 
 
