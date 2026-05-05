@@ -18,9 +18,9 @@ enum GameState { MENU, PLAYING, PAUSED, GAME_OVER, HIGH_SCORE_PAGE, HELP_PAGE };
 GameState gameState = MENU;
 float lerp(float a, float b, float t) { return a + t * (b - a); }
 
-// ─── Constants─────────
+
 const int   NUM_STICKS = 2;
-const float STICK_Y[2] = { 540.f, 500.f }; // y positions of sticks
+const float STICK_Y[2] = { 540.f, 500.f }; 
 const float STICK_X1 = 50.f;
 const float STICK_X2 = 750.f;
 const float BASKET_Y = 60.f;
@@ -99,7 +99,7 @@ float wideTimer = 0;
 bool  slowActive = false;
 float slowTimer = 0;
 
-int   menuSelected    = 0; // 0=Start,1=HighScore,2=Help,3=Exit
+int   menuSelected    = 0; 
 int   pauseSelected   = 0;
 
 float randF(float lo, float hi) {
@@ -305,7 +305,6 @@ void drawEgg(float cx, float cy, EggType t) {
     }
 }
 
-// ─── Draw chicken ─────────────────────────────────────────────────────────────
 void drawChicken(float cx, float cy, bool facingRight) {
     float flip = facingRight ? 1.0f : -1.0f;
 
@@ -948,7 +947,7 @@ void display() {
 
 
 
-}// display complete
+}
 
 void keyboard(unsigned char key, int, int) {
     if (gameState == MENU) {
