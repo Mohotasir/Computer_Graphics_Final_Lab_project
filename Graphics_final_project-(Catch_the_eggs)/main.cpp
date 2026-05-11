@@ -13,12 +13,9 @@
 
 const int WIN_W = 800;
 const int WIN_H = 600;
-
 enum GameState { MENU, PLAYING, PAUSED, GAME_OVER, HIGH_SCORE_PAGE, HELP_PAGE };
 GameState gameState = MENU;
 float lerp(float a, float b, float t) { return a + t * (b - a); }
-
-
 const int   NUM_STICKS = 2;
 const float STICK_Y[2] = { 540.f, 500.f }; 
 const float STICK_X1 = 50.f;
@@ -32,8 +29,8 @@ const float PERK_H = 22.f;
 const int   GAME_DURATION = 120;
 const float BASE_FALL_SPD = 2.8f;
 
-
 enum EggType { EGG_NORMAL, EGG_GOLD, EGG_BLUE, EGG_POOP };
+
 int eggPoints(EggType t) {
     switch(t) {
         case EGG_NORMAL: return 1;
@@ -58,19 +55,19 @@ struct FallingObject {
 
 struct Chicken {
     float x;
-    float dir;   // +1 or -1
+    float dir;  
     float speed;
 };
 
 struct Particle {
     float x, y, vx, vy;
     float r, g, b;
-    float life;   // 0..1
+    float life;  
     bool  active;
 };
 
 struct Airflow {
-    float strength;  // horizontal push per frame
+    float strength;  
     float timer;     // remaining frames
     bool  active;
 };
@@ -80,8 +77,6 @@ std::vector<FallingObject> objects;
 std::vector<Particle> particles;
 Airflow airflow = {0, 0, false};
 
-
-
 float basketX = WIN_W / 2.0f;
 float basketW = BASKET_W_DEF;
 float fallSpeed = BASE_FALL_SPD;
@@ -89,7 +84,6 @@ int   score = 0;
 int   highScore = 0;
 int   timeLeft = GAME_DURATION;
 int   lastTimeSec = 0;
-
 bool  shieldActive = false;
 float shieldTimer = 0;
 bool  doublePoints = false;
@@ -98,7 +92,6 @@ bool  wideActive = false;
 float wideTimer = 0;
 bool  slowActive = false;
 float slowTimer = 0;
-
 int   menuSelected    = 0; 
 int   pauseSelected   = 0;
 
@@ -115,7 +108,7 @@ void spawnEgg(int stickIdx) {
     o.vy = -(fallSpeed + randF(0, 1.0f));
     o.active  = true;
     o.isPerk  = false;
-
+    
     float r = randF(0, 1.0f);
     if      (r < 0.05f) o.eggType = EGG_GOLD;
     else if (r < 0.20f) o.eggType = EGG_BLUE;
