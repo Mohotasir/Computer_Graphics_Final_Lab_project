@@ -615,10 +615,10 @@ void drawHighScorePage() {
 void drawHelpPage() {
     glClear(GL_COLOR_BUFFER_BIT);
     drawBackground();
-    drawPanel(60, 80, WIN_W - 120, WIN_H - 160);
+    drawPanel(60, 5, WIN_W - 120, WIN_H-30);
 
     setColor(1.0f, 0.85f, 0.1f);
-    drawTextLarge(WIN_W/2 - 40, WIN_H - 100, "HELP");
+    drawTextLarge(WIN_W/2 - 40, WIN_H - 80, "HELP");
 
     setColor(1, 1, 1);
     float lx = 100, ly = WIN_H - 140;
@@ -647,7 +647,6 @@ void drawHelpPage() {
 }
 
 void drawPauseScreen() {
-    // Dim overlay
     setColor(0, 0, 0, 0.6f);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -778,8 +777,6 @@ void timerCallback(int) {
     }
 
     frameCount++;
-
-    // Wall clock countdown (approx 60 fps)
     if (frameCount % 60 == 0) {
         timeLeft--;
         if (timeLeft <= 0) {
@@ -789,14 +786,12 @@ void timerCallback(int) {
         }
     }
 
-    // Move chickens
     for (int i = 0; i < NUM_STICKS; i++) {
         chickens[i].x += chickens[i].dir * chickens[i].speed;
         if (chickens[i].x > STICK_X2 - 30) { chickens[i].x = STICK_X2 - 30; chickens[i].dir = -1; }
         if (chickens[i].x < STICK_X1 + 30) { chickens[i].x = STICK_X1 + 30; chickens[i].dir =  1; }
     }
 
-    // Spawn eggs (each stick)
     spawnCounter++;
     int spawnInterval = slowActive ? 100 : 55;
     if (spawnCounter >= spawnInterval) {
@@ -804,14 +799,12 @@ void timerCallback(int) {
         spawnCounter = 0;
     }
 
-    // Spawn perks
     perkCounter++;
     if (perkCounter >= 420) {
         spawnPerk();
         perkCounter = 0;
     }
 
-    // Airflow (BONUS)
     windCounter++;
     if (windCounter >= 600) {
         airflow.strength = randF(-1.5f, 1.5f);
@@ -824,7 +817,6 @@ void timerCallback(int) {
         if (airflow.timer <= 0) airflow.active = false;
     }
 
-    // Move objects
     for (auto& o : objects) {
         if (!o.active) continue;
         o.vy -= 0.04f; // slight acceleration
@@ -832,11 +824,9 @@ void timerCallback(int) {
         o.x += o.vx;
         o.y += o.vy;
 
-        // Bounce off walls (drift)
         if (o.x < 0) { o.x = 0; o.vx = fabsf(o.vx) * 0.5f; }
         if (o.x > WIN_W) { o.x = WIN_W; o.vx = -fabsf(o.vx) * 0.5f; }
 
-        // Hit basket
         if (hitsBasket(o)) {
             o.active = false;
             if (o.isPerk) {
@@ -848,7 +838,6 @@ void timerCallback(int) {
                 score += pts;
                 if (score < 0) score = 0;
                 spawnPopup(o.x, BASKET_Y + BASKET_H + 10, pts);
-                // Particles
                 float r = 1, g = 1, b = 0.5f;
                 if (o.eggType == EGG_GOLD)  { r=1;    g=0.85f; b=0.1f; }
                 if (o.eggType == EGG_BLUE)  { r=0.2f; g=0.5f;  b=1;    }
@@ -857,21 +846,18 @@ void timerCallback(int) {
             }
         }
 
-        // Off screen
         if (o.y < -30) o.active = false;
     }
 
-    // Cleanup inactive objects
+
     objects.erase(std::remove_if(objects.begin(), objects.end(),
         [](const FallingObject& o){ return !o.active; }), objects.end());
 
-    // Perk timers
     if (wideActive)   { wideTimer--;   if (wideTimer <= 0)   { wideActive   = false; basketW    = BASKET_W_DEF; } }
     if (slowActive)   { slowTimer--;   if (slowTimer <= 0)   { slowActive   = false; fallSpeed  = BASE_FALL_SPD; } }
     if (shieldActive) { shieldTimer--; if (shieldTimer <= 0) { shieldActive = false; } }
     if (doublePoints) { doubleTimer--; if (doubleTimer <= 0) { doublePoints = false; } }
 
-    // Update particles
     for (auto& p : particles) {
         if (!p.active) continue;
         p.x += p.vx; p.y += p.vy;
@@ -882,7 +868,6 @@ void timerCallback(int) {
     particles.erase(std::remove_if(particles.begin(), particles.end(),
         [](const Particle& p){ return !p.active; }), particles.end());
 
-    // Update popups
     for (auto& p : popups) {
         if (!p.active) continue;
         p.y += 0.8f;
@@ -929,7 +914,7 @@ void display() {
     }
    
     drawPopups();
-   drawParticles();
+    drawParticles();
 
     drawHUD();
     drawBasket(basketX, basketW);
@@ -938,13 +923,11 @@ void display() {
     if (gameState == GAME_OVER) drawGameOver();
     glutSwapBuffers();
 
-
-
 }
 
 void keyboard(unsigned char key, int, int) {
     if (gameState == MENU) {
-        if (key == 13) { // ENTER
+        if (key == 13) { 
             if (menuSelected == 0) { resetGame(); gameState = PLAYING; }
             else if (menuSelected == 1) { gameState = HIGH_SCORE_PAGE; }
             else if (menuSelected == 2) { gameState = HELP_PAGE; }
@@ -971,7 +954,7 @@ void keyboard(unsigned char key, int, int) {
             gameState = PLAYING;
         return;
     }
-    // PLAYING
+
     if (key == 'a' || key == 'A') basketX = std::max(basketW/2, basketX - 15.0f);
     if (key == 'd' || key == 'D') basketX = std::min((float)WIN_W - basketW/2, basketX + 15.0f);
     if (key == 'p' || key == 'P' || key == ' ') { gameState = PAUSED; pauseSelected = 0; }
@@ -1002,7 +985,7 @@ void mouseMove(int x, int) {
 }
 
 void mouseClick(int button, int state, int mx, int my) {
-    float ry = WIN_H - my; // flip y
+    float ry = WIN_H - my; 
     if (gameState == MENU && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         float bx = WIN_W/2 - 130, bw = 260, bh = 38, gap = 50;
         float by = WIN_H/2 + 65;
@@ -1010,7 +993,7 @@ void mouseClick(int button, int state, int mx, int my) {
             float lby = by - i * gap;
             if (mx > bx && mx < bx + bw && ry > lby && ry < lby + bh) {
                 menuSelected = i;
-                // Simulate enter
+
                 if (i == 0) { resetGame(); gameState = PLAYING; }
                 else if (i == 1) gameState = HIGH_SCORE_PAGE;
                 else if (i == 2) gameState = HELP_PAGE;
